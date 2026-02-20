@@ -1,0 +1,118 @@
+.booking-page {
+  min-height: 100%;
+  padding: 60px 40px;
+  background: linear-gradient(135deg,
+      #0F172A 0%,
+      #1E1B4B 40%,
+      #0B1120 100%);
+  border-radius: 20px;
+  animation: fadeIn 0.6s ease;
+}
+
+.booking-title {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 40px;
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+/*  Glass Card */
+.booking-form {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 40px;
+  max-width: 480px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 0 20px rgba(255, 255, 255, 0.05);
+
+  transition: all 0.4s ease;
+}
+
+/*  Hover Lift Effect */
+.booking-form:hover {
+  transform: translateY(-10px) scale(1.02);
+  box-shadow:
+    0 20px 40px rgba(79, 70, 229, 0.35),
+    inset 0 0 25px rgba(255, 255, 255, 0.08);
+}
+
+/* Inputs & Select */
+.booking-form select,
+.booking-form input {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  font-size: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* Focus Glow */
+.booking-form select:focus,
+.booking-form input:focus {
+  border: 1px solid #6366F1;
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* Dropdown options clean */
+.booking-form select option {
+  color: black;
+  background: white;
+}
+
+/* Premium Gradient Button */
+.booking-form button {
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+
+  background: linear-gradient(135deg,
+      #4F46E5,
+      #06B6D4);
+
+  color: white;
+  transition: all 0.3s ease;
+}
+
+/* Button Hover */
+.booking-form button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+}
+
+/* Button Click */
+.booking-form button:active {
+  transform: scale(0.97);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
