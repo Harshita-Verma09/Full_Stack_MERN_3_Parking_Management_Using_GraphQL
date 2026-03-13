@@ -1,4 +1,4 @@
-# MERN Parking System
+# MERN Parking Management System
 
 यह repository एक साधारण MERN-stack (MongoDB, Express, React, Node) पर आधारित Parking Management System है।
 
