@@ -73,3 +73,70 @@
   border-radius: 20px;
   margin-bottom: 40px;
 }
+
+.help-container {
+  max-width: 900px;
+  margin: auto;
+  padding: 30px;
+  color: white;
+}
+
+.help-title {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 32px;
+}
+
+.help-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.help-card {
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.help-card:hover {
+  transform: translateY(-5px);
+  background: #334155;
+}
+
+.help-box {
+  margin-top: 30px;
+  background: #0f172a;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.help-box ul {
+  padding-left: 20px;
+}
+
+.help-contact {
+  margin-top: 30px;
+  background: #1e293b;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.help-warning {
+  margin-top: 30px;
+  background: #fff3cd;
+  color: #856404;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ffeeba;
+}
+
+.help-warning h2 {
+  margin-bottom: 10px;
+}
+
+.help-warning ul {
+  padding-left: 20px;
+}

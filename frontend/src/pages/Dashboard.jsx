@@ -1,7 +1,9 @@
-
 import { useEffect, useState } from "react";
 import "../styles/dashboard.css";
 import Booking from "./Booking";
+import MyBookingId from "./MyBookingId";
+import ScanBookings from "./ScanBooking";
+import Help from "./Help";
 
 import {
   LineChart,
@@ -20,6 +22,8 @@ import {
 } from "recharts";
 
 export default function Dashboard() {
+  const userEmail = localStorage.getItem("email");
+
   const [stats, setStats] = useState(null);
   const [activeTab, setActiveTab] = useState("analytics");
 
@@ -80,52 +84,85 @@ export default function Dashboard() {
         Parking Analytics Dashboard
       </h1>
 
+      {/* Tabs */}
       <div className="tabs">
+
         <button
           className={activeTab === "analytics" ? "active" : ""}
           onClick={() => setActiveTab("analytics")}
         >
           Analytics
         </button>
+
         <button
           className={activeTab === "booking" ? "active" : ""}
           onClick={() => setActiveTab("booking")}
         >
           Booking
         </button>
+
+        <button
+          className={activeTab === "myBookingId" ? "active" : ""}
+          onClick={() => setActiveTab("myBookingId")}
+        >
+          My Booking ID
+        </button>
+
+        <button
+          className={activeTab === "help" ? "active" : ""}
+          onClick={() => setActiveTab("help")}
+        >
+          Help
+        </button>
+
+        <button
+          className={activeTab === "scan" ? "active" : ""}
+          onClick={() => setActiveTab("scan")}
+        >
+          Scan QR
+        </button>
+
       </div>
 
+      {/* ANALYTICS TAB */}
       {activeTab === "analytics" && (
         <>
-          {/* Cards */}
+
           <div className="cards">
+
             <div className="card">
               <h3>Total Slots</h3>
               <p>{stats.totalSlots}</p>
             </div>
+
             <div className="card">
               <h3>Occupied</h3>
               <p>{stats.occupiedSlots}</p>
             </div>
+
             <div className="card">
               <h3>Available</h3>
               <p>{availableSlots}</p>
             </div>
+
             <div className="card">
               <h3>Total Bookings</h3>
               <p>{stats.totalBookings}</p>
             </div>
+
             <div className="card">
               <h3>Total Vehicles</h3>
               <p>{stats.totalCars + stats.totalBikes}</p>
             </div>
+
           </div>
 
-          {/* Charts Grid */}
+          {/* Charts */}
           <div className="charts-grid">
-            {/* Line Chart */}
+
             <div className="chart-container">
               <h2>Daily Booking Trend</h2>
+
               <ResponsiveContainer width="100%" height={300}>
                 <LineChart data={stats.analytics}>
                   <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
@@ -143,9 +180,9 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            {/* Bar Chart */}
             <div className="chart-container">
               <h2>Vehicle Distribution</h2>
+
               <ResponsiveContainer width="100%" height={300}>
                 <BarChart data={barData}>
                   <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
@@ -160,9 +197,9 @@ export default function Dashboard() {
               </ResponsiveContainer>
             </div>
 
-            {/* Pie Chart */}
             <div className="chart-container">
               <h2>Slot Usage Ratio</h2>
+
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
@@ -180,14 +217,41 @@ export default function Dashboard() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
+
           </div>
+
         </>
       )}
 
+      {/* BOOKING TAB */}
       {activeTab === "booking" && (
         <Booking refreshDashboard={fetchStats} />
+      )}
+
+      {/* MY BOOKING TAB */}
+      {activeTab === "myBookingId" && (
+        <MyBookingId />
+      )}
+
+      {/* HELP TAB */}
+
+      {activeTab === "help" && (
+        <Help />
+      )}
+
+
+      {/* SCAN QR TAB */}
+
+      {/* {activeTab === "scan" && userEmail && (
+        <ScanBookings email={userEmail} />
+      )} */}
+
+      {activeTab === "scan" && userEmail && (
+        <ScanBookings />
       )}
 
     </div>
   );
 }
+
+

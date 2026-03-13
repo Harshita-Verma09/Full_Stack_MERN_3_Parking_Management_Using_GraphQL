@@ -6,7 +6,7 @@ export default function Booking({ refreshDashboard }) {
     const [slots, setSlots] = useState([]);
     const token = sessionStorage.getItem("token");
 
-    //  Fetch Available Slots
+    // Fetch Available Slots
     const fetchSlots = async () => {
         try {
             const res = await fetch("http://localhost:5000/graphql", {
@@ -31,7 +31,6 @@ export default function Booking({ refreshDashboard }) {
             const data = await res.json();
 
             if (data.errors) {
-
                 alert("Authentication Failed. Please login again.");
                 return;
             }
@@ -46,11 +45,22 @@ export default function Booking({ refreshDashboard }) {
         fetchSlots();
     }, []);
 
-    //  Handle Booking
+    // Handle Booking
     const handleBooking = async (e) => {
         e.preventDefault();
 
         const form = e.target;
+
+        const fromTime = new Date(form.fromTime.value);
+        const toTime = new Date(form.toTime.value);
+
+        console.log("fromTime:", fromTime);
+        console.log("toTime:", toTime);
+
+        if (fromTime >= toTime) {
+            alert("To Time must be greater than From Time");
+            return;
+        }
 
         try {
             const res = await fetch("http://localhost:5000/graphql", {
@@ -62,42 +72,46 @@ export default function Booking({ refreshDashboard }) {
                 body: JSON.stringify({
                     query: `
                         mutation CreateBooking(
-                            $slotId: ID!,
-                            $vehicleType: String!,
-                            $vehicleNumber: String!,
-                            $fromTime: String!,
-                            $toTime: String!
+                          $slotId: ID!,
+                          $vehicleType: String!,
+                          $vehicleNumber: String!,
+                          $fromTime: String!,
+                          $toTime: String!
                         ) {
-                            createBooking(
-                                slotId:$slotId,
-                                vehicleType:$vehicleType,
-                                vehicleNumber:$vehicleNumber,
-                                fromTime:$fromTime,
-                                toTime:$toTime
-                            )
+                          createBooking(
+                            slotId: $slotId,
+                            vehicleType: $vehicleType,
+                            vehicleNumber: $vehicleNumber,
+                            fromTime: $fromTime,
+                            toTime: $toTime
+                          ) {
+                            message
+                            qrToken
+                          }
                         }
                     `,
                     variables: {
                         slotId: form.slot.value,
                         vehicleType: form.vehicleType.value,
                         vehicleNumber: form.vehicleNumber.value,
-                        fromTime: form.fromTime.value,
-                        toTime: form.toTime.value
+                        fromTime: fromTime.toISOString(),
+                        toTime: toTime.toISOString()
                     }
                 })
             });
 
             const data = await res.json();
 
-
             if (data.errors) {
-
                 alert(data.errors[0].message);
                 return;
             }
 
             if (data.data?.createBooking) {
-                alert("Booking Done!");
+
+                const { message } = data.data.createBooking;
+
+                alert(message);
 
                 if (refreshDashboard) {
                     refreshDashboard();
@@ -105,15 +119,17 @@ export default function Booking({ refreshDashboard }) {
 
                 fetchSlots();
                 form.reset();
+
             } else {
                 alert("Booking Failed!");
             }
 
         } catch (error) {
-
+            console.error("Booking Error:", error);
             alert("Something went wrong!");
         }
     };
+
 
     return (
         <div className="booking-page">
@@ -136,7 +152,9 @@ export default function Booking({ refreshDashboard }) {
                 </select>
 
                 <input name="vehicleNumber" placeholder="Vehicle Number" required />
+
                 <input type="datetime-local" name="fromTime" required />
+
                 <input type="datetime-local" name="toTime" required />
 
                 <button type="submit">Book Now</button>

@@ -1,13 +1,14 @@
 
+
 const User = require("../models/User");
 const ParkingSlot = require("../models/ParkingSlot");
 const Booking = require("../models/Booking");
 const generateOTP = require("../utils/generateOTP");
 const sendOTP = require("../utils/sendOTP");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
-
-//  Helper: Get Logged-in User ID from Authorization Header
+// Helper: Get Logged-in User ID
 const getUserId = (req) => {
   const authHeader = req.headers.authorization;
 
@@ -25,11 +26,9 @@ const getUserId = (req) => {
   }
 };
 
-
 module.exports = {
   Query: {
 
-    // Dashboard Stats
     dashboardStats: async () => {
       const totalSlots = await ParkingSlot.countDocuments();
       const occupiedSlots = await ParkingSlot.countDocuments({ isOccupied: true });
@@ -39,25 +38,16 @@ module.exports = {
 
       const now = new Date();
 
-      const startOfDay = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        0, 0, 0, 0
-      );
+      // const startOfDay = new Date(now.setHours(0, 0, 0, 0));
+      // const endOfDay = new Date(now.setHours(23, 59, 59, 999));
 
-      const endOfDay = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate(),
-        23, 59, 59, 999
-      );
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
 
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
       const todayBookings = await Booking.countDocuments({
-        fromTime: {
-          $gte: startOfDay,
-          $lte: endOfDay
-        }
+        fromTime: { $gte: startOfDay, $lte: endOfDay }
       });
 
       return {
@@ -67,12 +57,10 @@ module.exports = {
         totalCars,
         totalBikes,
         todayBookings,
-        todayDate: now.toLocaleDateString("en-GB")
+        todayDate: new Date().toLocaleDateString("en-GB")
       };
     },
 
-
-    // Booking Analytics
     bookingAnalytics: async () => {
       const analytics = await Booking.aggregate([
         {
@@ -95,26 +83,82 @@ module.exports = {
       }));
     },
 
-
-    // Available Slots
     availableSlots: async () => {
       return await ParkingSlot.find({ isOccupied: false });
     },
 
-
-    // My Bookings (Protected)
     myBookings: async (_, __, { req }) => {
       const userId = getUserId(req);
-      return await Booking.find({ user: userId }).populate("slot");
+
+      const now = new Date();
+
+      return await Booking.find({
+        user: userId,
+
+      })
+        .populate("slot")
+        .sort({ createdAt: -1 });
+    },
+
+    bookingsByEmail: async (_, { email }) => {
+
+      const user = await User.findOne({ email });
+
+      if (!user) {
+        throw new Error("User not found");
+      }
+
+      const bookings = await Booking.find({ user: user._id })
+        .populate("slot")
+        .sort({ createdAt: -1 }); // latest booking first
+
+      return bookings;
+    },
+    // scanBookingsByEmail: async (_, { email }) => {
+
+    //   const user = await User.findOne({ email });
+
+    //   if (!user) {
+    //     throw new Error("User not found");
+    //   }
+
+    //   const startOfDay = new Date();
+    //   startOfDay.setHours(0, 0, 0, 0);
+
+    //   const endOfDay = new Date();
+    //   endOfDay.setHours(23, 59, 59, 999);
+
+    //   const bookings = await Booking.find({
+    //     user: user._id,
+    //     fromTime: { $lte: endOfDay },
+    //     toTime: { $gte: startOfDay }
+    //   }).populate("slot");
+
+    //   return bookings;
+    // }
+
+
+
+    scanBookings: async (_, __, { req }) => {
+
+      const userId = getUserId(req);
+
+      console.log("USER ID FROM TOKEN:", userId);
+
+      const bookings = await Booking.find({ user: userId })
+        .populate("slot")
+        .sort({ createdAt: -1 });
+
+      console.log("BOOKINGS FOUND:", bookings);
+
+      return bookings;
     }
+
 
   },
 
-
-
   Mutation: {
 
-    // Register
     register: async (_, { username, email }) => {
       const userExist = await User.findOne({ email });
       if (userExist) throw new Error("User already exists");
@@ -123,8 +167,6 @@ module.exports = {
       return { message: "Registered successfully" };
     },
 
-
-    // Login → Send OTP
     login: async (_, { email }) => {
       const user = await User.findOne({ email });
       if (!user) throw new Error("Invalid Email");
@@ -139,8 +181,6 @@ module.exports = {
       return { message: "OTP sent to email" };
     },
 
-
-    // Verify OTP → Return JWT Token (No Cookies)
     verifyOTP: async (_, { email, otp }) => {
       const user = await User.findOne({ email });
 
@@ -165,8 +205,6 @@ module.exports = {
       };
     },
 
-
-    // Create Booking (Protected)
     createBooking: async (_, args, { req }) => {
       const userId = getUserId(req);
 
@@ -179,27 +217,58 @@ module.exports = {
       const start = new Date(fromTime);
       const end = new Date(toTime);
 
+      // validation add karo
+      if (isNaN(start) || isNaN(end)) {
+        throw new Error("Invalid Date format");
+      }
+
       const hours = (end - start) / (1000 * 60 * 60);
       if (hours <= 0) throw new Error("Invalid time range");
 
       const rate = vehicleType === "car" ? 50 : 20;
       const amount = Math.ceil(hours) * rate;
 
-      await Booking.create({
+      const qrToken = crypto.randomBytes(16).toString("hex");
+
+      const booking = await Booking.create({
         user: userId,
         slot: slotId,
         vehicleType,
         vehicleNumber,
         fromTime: start,
         toTime: end,
-        amount
+        amount,
+        qrToken,
+        entryStatus: "PENDING"
       });
 
       slot.isOccupied = true;
       await slot.save();
 
-      return "Booking Successful";
-    }
+      return {
+        message: "Booking Successful",
+        qrToken
+      };
+    },
+
+    verifyBookingByToken: async (_, { token }) => {
+      const booking = await Booking.findOne({ qrToken: token })
+        .populate("user")
+        .populate("slot");
+
+      if (!booking) throw new Error("Invalid QR Code");
+      if (booking.entryStatus === "ENTERED")
+        throw new Error("Vehicle already entered");
+      if (new Date() > booking.toTime)
+        throw new Error("Booking expired");
+
+      booking.entryStatus = "ENTERED";
+      await booking.save();
+
+      return booking;
+    },
+
+
 
   }
 };

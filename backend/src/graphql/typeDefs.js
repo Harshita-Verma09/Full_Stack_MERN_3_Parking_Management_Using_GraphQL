@@ -41,14 +41,22 @@ module.exports = gql`
     isOccupied: Boolean
   }
 
-  type Booking {
-    id: ID
-    vehicleType: String
-    vehicleNumber: String
-    fromTime: String
-    toTime: String
-    amount: Float
-    status: String
+ type Booking {
+  id: ID
+  vehicleType: String
+  vehicleNumber: String
+  fromTime: String
+  toTime: String
+  amount: Float
+  entryStatus: String
+  qrToken: String
+  slot: ParkingSlot
+}
+
+
+  type BookingResponse {
+    message: String
+    qrToken: String
   }
 
   type Query {
@@ -56,19 +64,26 @@ module.exports = gql`
     bookingAnalytics: [BookingAnalytics]
     availableSlots: [ParkingSlot]
     myBookings: [Booking]
+    scanBookings: [Booking]
+
+    scanBookingsByEmail(email: String!): [Booking]
+    bookingsByEmail(email: String!): [Booking]
   }
 
   type Mutation {
     register(username: String!, email: String!): Message
     login(email: String!): Message
     verifyOTP(email: String!, otp: String!): AuthResponse
+
     createBooking(
       slotId: ID!
       vehicleType: String!
       vehicleNumber: String!
       fromTime: String!
       toTime: String!
-    ): String
+    ): BookingResponse
+
+    verifyBookingByToken(token: String!): Booking
   }
 
 `;
