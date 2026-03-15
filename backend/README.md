@@ -1,4 +1,4 @@
-# Backend — MERN Parking System
+# Backend — MERN Parking System Using Graphql
 
 Backend is a GraphQL server built with Express and Apollo, using MongoDB via Mongoose.
 
