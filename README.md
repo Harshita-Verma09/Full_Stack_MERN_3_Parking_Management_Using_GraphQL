@@ -1,20 +1,40 @@
 # MERN Parking Management System Using Graphql.
 
-यह repository एक साधारण MERN-stack (MongoDB, Express, React, Node) पर आधारित Parking Management System है।
+A simple **Parking Management System** built using the **MERN stack** (MongoDB, Express, React, Node.js).
 
-- Backend: GraphQL API, OTP-based login, booking logic
-- Frontend: React + Vite UI
+---
 
-Repository structure
+##  Features
 
-- `backend/` — server (GraphQL, MongoDB)
-- `frontend/` — React app (Vite)
+### Backend
+- ✅ GraphQL API
+- ✅ OTP-based authentication (login)
+- ✅ Parking booking logic
 
-Quick start
+### Frontend
+- ✅ Built with **React + Vite**
+- ✅ Clean and responsive UI
 
-Prerequisites: `node` (>=16), `npm`, MongoDB (remote or local)
+---
 
-1. Start backend
+##  Project Structure
+
+```
+backend/   → Server (GraphQL, MongoDB)
+frontend/  → React app (Vite)
+```
+
+---
+
+## ⚡ Quick Start
+
+### 🔧 Prerequisites
+
+- Node.js (>=16)
+- npm
+- MongoDB (local or remote)
+
+###  Start Backend
 
 ```bash
 cd backend
@@ -22,9 +42,10 @@ npm install
 npm start
 ```
 
-Server runs on `http://localhost:5000` and GraphQL playground at `http://localhost:5000/graphql`.
+- Server: `http://localhost:5000`
+- GraphQL Playground: `http://localhost:5000/graphql`
 
-2. Start frontend
+### 💻 Start Frontend
 
 ```bash
 cd frontend
@@ -32,23 +53,21 @@ npm install
 npm run dev
 ```
 
-Frontend default Vite URL: `http://localhost:5173`.
+- Frontend: `http://localhost:5173`
 
-Environment
+---
 
-Create a `.env` file inside `backend/` with at least:
+##  Environment Variables
 
-```
+Create a `.env` file inside the `backend/` folder with the following values:
+
+```env
 MONGO_URI=your_mongo_connection_string
 JWT_SECRET=some_secret
 MAIL_USER=your_email@gmail.com
 MAIL_PASS=app_specific_password
 ```
 
-Contributing
+---
 
-- Open issues or pull requests on GitHub.
 
-License
-
-- Add your preferred license here.
