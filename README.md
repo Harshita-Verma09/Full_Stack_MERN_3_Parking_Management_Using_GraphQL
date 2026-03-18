@@ -1,10 +1,11 @@
 # MERN Parking Management System Using Graphql.
 
-A simple **Parking Management System** built using the **MERN stack** (MongoDB, Express, React, Graphql, Node.js).
+
+A simple **Parking Management System** built using the **MERN stack** (MongoDB, Express, React, Node.js).
 
 ---
 
-##  Features
+## 🧩 Features
 
 ### Backend
 - ✅ GraphQL API
@@ -28,7 +29,7 @@ frontend/  → React app (Vite)
 
 ## ⚡ Quick Start
 
-### 🔧 Prerequisites
+###  Prerequisites
 
 - Node.js (>=16)
 - npm
@@ -45,7 +46,7 @@ npm start
 - Server: `http://localhost:5000`
 - GraphQL Playground: `http://localhost:5000/graphql`
 
-### 💻 Start Frontend
+###  Start Frontend
 
 ```bash
 cd frontend
@@ -70,4 +71,56 @@ MAIL_PASS=app_specific_password
 
 ---
 
+##  About this Project
 
+This project is a full-stack parking management solution designed to demonstrate how a modern MERN stack app can handle:
+
+- Secure login via OTP (email-based authentication)
+- Parking slot booking and availability tracking
+- Role-based features (e.g., user bookings vs. admin management)
+- Clean UI built with React and Vite for a great developer experience
+
+##  Tech Stack
+
+- **Backend:** Node.js, Express, GraphQL, MongoDB
+- **Frontend:** React, Vite, Tailwind CSS (or plain CSS depending on implementation)
+- **Auth:** JWT + OTP via email
+- **DB:** MongoDB (local or hosted)
+
+##  More Project Details
+
+### Backend (backend/)
+- `src/schema/` - GraphQL schema definitions
+- `src/resolvers/` - GraphQL resolvers for queries/mutations
+- `src/models/` - Mongoose models (User, Booking, ParkingSlot)
+- `src/utils/` - Helpers for auth, email, validation
+
+### Frontend (frontend/)
+- `src/components/` - Reusable UI components (cards, forms, layouts)
+- `src/pages/` - Pages/routes for the app (login, dashboard, booking)
+- `src/services/` - API client + GraphQL hooks
+
+##  Common Tasks
+
+### Run backend in development
+
+```bash
+cd backend
+npm run dev
+```
+
+### Run frontend in development
+
+```bash
+cd frontend
+npm run dev
+```
+
+### Run tests (if available)
+
+Check `backend/package.json` and `frontend/package.json` for test scripts.
+
+##  Contributing
+
+- Open issues
+- Submit pull requests
