@@ -1,6 +1,6 @@
 # MERN Parking Management System Using Graphql.
 
-A simple **Parking Management System** built using the **MERN stack** (MongoDB, Express, React, Node.js).
+A simple **Parking Management System** built using the **MERN stack** (MongoDB, Express, React, Graphql, Node.js).
 
 ---
 
