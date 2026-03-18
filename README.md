@@ -5,7 +5,7 @@ A simple **Parking Management System** built using the **MERN stack** (MongoDB, 
 
 ---
 
-## 🧩 Features
+##  Features
 
 ### Backend
 - ✅ GraphQL API
