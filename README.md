@@ -7,6 +7,7 @@ A simple **Parking Management System** built using the **MERN stack** (MongoDB, 
 
 ##  Features
 
+
 ### Backend
 - ✅ GraphQL API
 - ✅ OTP-based authentication (login)
