@@ -27,7 +27,7 @@ frontend/  → React app (Vite)
 
 ---
 
-## ⚡ Quick Start
+##  Quick Start
 
 ###  Prerequisites
 
@@ -116,11 +116,5 @@ cd frontend
 npm run dev
 ```
 
-### Run tests (if available)
 
-Check `backend/package.json` and `frontend/package.json` for test scripts.
 
-##  Contributing
-
-- Open issues
-- Submit pull requests
