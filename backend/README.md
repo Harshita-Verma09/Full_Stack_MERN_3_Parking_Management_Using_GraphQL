@@ -9,6 +9,7 @@ npm install
 npm start
 ```
 
+
 - Server listens on port `5000`.
 - GraphQL endpoint: `http://localhost:5000/graphql`.
 
