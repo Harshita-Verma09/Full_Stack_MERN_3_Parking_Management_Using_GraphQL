@@ -7,8 +7,9 @@ const app = express();
 
 app.use(express.json());
 
+//  FINAL CORS FIX
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: true,   // sab localhost ports allow
     credentials: true
 }));
 
